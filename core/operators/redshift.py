@@ -103,7 +103,7 @@ class RedshiftOperator:
                 NodeType=self.dwh_node_type,
                 NumberOfNodes=int(self.dwh_num_nodes),
                 DBName=self.dwh_db_name,
-                ClusterIdentifier= self.dwh_cluster_id,
+                ClusterIdentifier=self.dwh_cluster_id,
                 MasterUsername=self.dwh_db_user,
                 MasterUserPassword=DWH_DB_PASSWORD,
                 IamRoles=[role_arn],
