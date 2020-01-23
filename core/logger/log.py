@@ -8,7 +8,7 @@ DATEFMT = '%Y-%m-%d %H:%M:%S'
 
 def setup_custom_logger(name):
     """
-    Sets up a customer logger for use in the application. The logging
+    Sets up a custom logger for use in the application. The logging
     level is set to DEBUG by default; all debug messages will be logged
     to the terminal.
 
