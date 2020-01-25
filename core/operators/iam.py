@@ -1,5 +1,5 @@
-import boto3
 import json
+import boto3
 
 from core.logger import log
 from settings.aws_policies import (
@@ -27,24 +27,21 @@ class IAMOperator:
         self.dwh_trust_policy = REDSHIFT_TRUST_RELATIONSHIP
         self.client = self.create_iam_client()
 
-
     @property
     def user_info(self):
 
         return self.client.get_user()
-
 
     @property
     def dwh_role_arn(self):
 
         return self._dwh_role_arn
 
-
     def create_iam_client(self):
         """
-        Creates an IAM client with the AWS credentials in the application's config
-        files. The AWS credentials must be of a user with admin access or with the
-        IAMFullAccess and AmazonRedshiftFullAccess applied.
+        Creates an IAM client with the AWS credentials in the application's
+        config files. The AWS credentials must be of a user with admin access
+        or with the IAMFullAccess and AmazonRedshiftFullAccess applied.
 
         Returns:
             boto3.client
@@ -60,12 +57,11 @@ class IAMOperator:
 
         return client
 
-
     def create_role(self):
         """
-        Creates an AWS role so that the Redshift client can load data from S3. The
-        trust policy of the role is declared in the configuration files and assigned
-        as a property of this class.
+        Creates an AWS role so that the Redshift client can load data from S3.
+        The trust policy of the role is declared in the configuration files and
+        assigned as a property of this class.
 
         Returns:
             json
@@ -83,7 +79,7 @@ class IAMOperator:
                 RoleName=self.dwh_db_role,
                 AssumeRolePolicyDocument=json.dumps(self.dwh_trust_policy),
                 Description=(
-                    'Allows Redshift clusters to call AWS services on your behalf.'
+                    'Allows Redshift clusters to call AWS services.'
                 )
             )
         except self.client.exceptions.EntityAlreadyExistsException:
@@ -98,10 +94,9 @@ class IAMOperator:
 
         return response
 
-
     def attach_role_policies(self):
         """
-        Attaches a list of policies to the AWS role created by this application.
+        Attaches a list of policies to the AWS role created by the application.
         The policy list is assigned as a property of this class and includes S3
         read access to ingest raw data as standard, but additional policies may
         be added as the need arises.
@@ -129,12 +124,11 @@ class IAMOperator:
 
         return responses
 
-
     def detach_role_policies(self):
         """
         Detach the policies from the data warehouse role associated with this
-        application. This function is invoked from the teardown() method of this
-        class when the application is in `dry_run` mode.
+        application. This function is invoked from the teardown() method of
+        this class when the application is in `dry_run` mode.
 
         Returns:
             list
@@ -155,12 +149,12 @@ class IAMOperator:
 
         return responses
 
-
     def delete_dwh_role(self):
         """
-        Deletes the data warehouse role created by this application. This function
-        is invoked from the teardown() method of this class which tears down the
-        AWS infrastructure when the ETL operation completes in `dry_run` mode.
+        Deletes the data warehouse role created by this application. This
+        function is invoked from the teardown() method of this class which
+        tears down the AWS infrastructure when the ETL operation completes
+        in `dry_run` mode.
 
         Returns:
             json
@@ -176,12 +170,11 @@ class IAMOperator:
 
         return response
 
-
     def teardown(self):
         """
         Detaches the policies from the application's data warehouse role then
-        deletes it. This function is executed when the application is in `dry_run`
-        mode; the AWS infrastructure is torn down upon completion.
+        deletes it. This function is executed when the application is in
+        `dry_run` mode; the AWS infrastructure is torn down upon completion.
 
         Returns:
             None

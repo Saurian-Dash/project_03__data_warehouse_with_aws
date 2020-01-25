@@ -10,16 +10,16 @@ def main(args):
 
 if __name__ == '__main__':
     """
-    Enables command line parameters to be passed to the application to determine
-    the execution mode.
+    Enables command line parameters to be passed to the application to
+    determine the execution mode.
 
     Args:
-        --dry_run (flag): From the terminal, start the application with this flag
-        to teardown the Redshift cluster and AWS infrastructure upon completion.
+        --dry_run (flag): From the terminal, start the application with this
+        flag to teardown the AWS infrastructure on completion.
         Example: python app.py --dry_run
 
-        --live (flag): From the terminal, start the application with this flag to
-        retain the Redshift cluster and AWS infrastructure upon completion.
+        --live (flag): From the terminal, start the application with this flag
+        to retain the the AWS infrastructure on completion.
         Example: python app.py --live
     """
 
@@ -29,13 +29,13 @@ if __name__ == '__main__':
         '--dry_run',
         dest='dry_run',
         action='store_true',
-        help='Teardown Redshift cluster and AWS infrastructure after ETL operation.',
+        help='Teardown AWS infrastructure after ETL operation.',
         )
     parser.add_argument(
         '--live',
         dest='dry_run',
         action='store_false',
-        help='Retain Redshift cluster and AWS infrastructure after ETL operation.',
+        help='Retain AWS infrastructure after ETL operation.',
     )
     parser.set_defaults(dry_run=True)
 

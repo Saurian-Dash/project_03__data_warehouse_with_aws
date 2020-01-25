@@ -35,23 +35,24 @@ def list_tables(schema):
     return sql.SQL(
         """
         SELECT
-	        table_schema,
-	        table_name
+            table_schema,
+            table_name
         FROM information_schema.tables
         WHERE table_schema = {schema}
             AND table_type = 'BASE TABLE';
         """
     ).format(schema=schema)
 
+
 # copy data from s3
 def copy_json_from_s3(
-    bucket,
-    region,
-    role_arn,
-    table,
-    jsonpaths='auto',
-    vault=DWH_DB_RAW_VAULT,
-    **kwargs):
+        bucket,
+        region,
+        role_arn,
+        table,
+        jsonpaths='auto',
+        vault=DWH_DB_RAW_VAULT,
+        **kwargs):
 
     return sql.SQL(
         """
@@ -134,7 +135,7 @@ def create_table_dim_artists(vault=DWH_DB_PUBLIC_VAULT, **kwargs):
             location VARCHAR(200) ENCODE ZSTD,
             latitude NUMERIC ENCODE AZ64,
             longitude NUMERIC ENCODE AZ64
-        ) 
+        )
         SORTKEY (artist_id);
         """
     ).format(vault=sql.Identifier(vault))
@@ -213,12 +214,12 @@ def create_table_fact_songplays(vault=DWH_DB_PUBLIC_VAULT, **kwargs):
 
 
 # transform tables for dimensional model
-def transform_table_dim_artists(    
-    raw_table=None,
-    public_table=None,
-    raw_vault=DWH_DB_RAW_VAULT,
-    public_vault=DWH_DB_PUBLIC_VAULT,
-    **kwargs):
+def transform_table_dim_artists(
+        raw_table=None,
+        public_table=None,
+        raw_vault=DWH_DB_RAW_VAULT,
+        public_vault=DWH_DB_PUBLIC_VAULT,
+        **kwargs):
 
     return sql.SQL(
         """
@@ -230,7 +231,7 @@ def transform_table_dim_artists(
             artist_name :: VARCHAR AS name,
             artist_location :: VARCHAR AS location,
             artist_latitude :: NUMERIC AS latitude,
-            artist_longitude :: NUMERIC AS longitude 
+            artist_longitude :: NUMERIC AS longitude
         FROM {raw_vault}.{raw_table}
         WHERE artist_id IS NOT NULL;
 
@@ -262,11 +263,11 @@ def transform_table_dim_artists(
 
 
 def transform_table_dim_songs(
-    raw_table=None,
-    public_table=None,
-    raw_vault=DWH_DB_RAW_VAULT,
-    public_vault=DWH_DB_PUBLIC_VAULT,
-    **kwargs):
+        raw_table=None,
+        public_table=None,
+        raw_vault=DWH_DB_RAW_VAULT,
+        public_vault=DWH_DB_PUBLIC_VAULT,
+        **kwargs):
 
     return sql.SQL(
         """
@@ -277,7 +278,7 @@ def transform_table_dim_songs(
             song_id :: VARCHAR,
             artist_id :: VARCHAR,
             title :: VARCHAR,
-            CASE 
+            CASE
                 WHEN year = '0' THEN NULL
                 ELSE year :: SMALLINT
             END AS year,
@@ -297,7 +298,7 @@ def transform_table_dim_songs(
             artist_id,
             title,
             year,
-            duration  
+            duration
         FROM t1;
 
         DROP TABLE IF EXISTS t1;
@@ -313,11 +314,11 @@ def transform_table_dim_songs(
 
 
 def transform_table_dim_time(
-    raw_table=None,
-    public_table=None,
-    raw_vault=DWH_DB_RAW_VAULT,
-    public_vault=DWH_DB_PUBLIC_VAULT,
-    **kwargs):
+        raw_table=None,
+        public_table=None,
+        raw_vault=DWH_DB_RAW_VAULT,
+        public_vault=DWH_DB_PUBLIC_VAULT,
+        **kwargs):
 
     return sql.SQL(
         """
@@ -335,7 +336,8 @@ def transform_table_dim_time(
         )
         SELECT DISTINCT
             ts :: BIGINT AS time_id,
-            TIMESTAMP 'epoch' + time_id / 1000 * INTERVAL '1 second' AS start_time,
+            TIMESTAMP 'epoch' + time_id / 1000 * INTERVAL '1 second'
+            AS start_time,
             EXTRACT (HOUR FROM start_time) :: SMALLINT AS hour,
             EXTRACT(DAY FROM start_time) :: SMALLINT AS day,
             EXTRACT(WEEK FROM start_time) :: SMALLINT AS week,
@@ -356,12 +358,12 @@ def transform_table_dim_time(
     )
 
 
-def transform_table_dim_users(    
-    raw_table=None,
-    public_table=None,
-    raw_vault=DWH_DB_RAW_VAULT,
-    public_vault=DWH_DB_PUBLIC_VAULT,
-    **kwargs):
+def transform_table_dim_users(
+        raw_table=None,
+        public_table=None,
+        raw_vault=DWH_DB_RAW_VAULT,
+        public_vault=DWH_DB_PUBLIC_VAULT,
+        **kwargs):
 
     return sql.SQL(
         """
@@ -419,11 +421,11 @@ def transform_table_dim_users(
 
 
 def transform_table_fact_songplays(
-    raw_table=None,
-    public_table=None,
-    raw_vault=DWH_DB_RAW_VAULT,
-    public_vault=DWH_DB_PUBLIC_VAULT,
-    **kwargs):
+        raw_table=None,
+        public_table=None,
+        raw_vault=DWH_DB_RAW_VAULT,
+        public_vault=DWH_DB_PUBLIC_VAULT,
+        **kwargs):
 
     raw_log_data, raw_song_data = raw_table
 
@@ -444,7 +446,8 @@ def transform_table_fact_songplays(
         CREATE TEMP TABLE t2 AS
         SELECT
             ts :: BIGINT AS time_id,
-            TIMESTAMP 'epoch' + time_id / 1000 * INTERVAL '1 second' AS start_time,
+            TIMESTAMP 'epoch' + time_id / 1000 * INTERVAL '1 second'
+            AS start_time,
             user_id :: BIGINT,
             level :: VARCHAR,
             t1.song_id :: VARCHAR AS song_id,
