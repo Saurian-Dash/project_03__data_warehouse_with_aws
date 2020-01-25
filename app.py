@@ -10,8 +10,8 @@ def main(args):
 
 if __name__ == '__main__':
     """
-    Enables command line parameters to be passed to the application to
-    determine the execution mode.
+    Enables command line parameters to be passed to the application to choose
+    the execution mode.
 
     Args:
         --dry_run (flag): From the terminal, start the application with this
