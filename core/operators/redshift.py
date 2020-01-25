@@ -29,36 +29,31 @@ class RedshiftOperator:
         self.dwh_num_nodes = DWH_NUM_NODES
         self.client = self.create_redshift_client()
 
-
     @property
     def cluster_endpoint(self):
 
         return self.get_cluster_endpoint()
-
 
     @property
     def cluster_info(self):
 
         return self.get_cluster_info()
 
-
     @property
     def cluster_region(self):
 
         return self.get_current_region()
-
 
     @property
     def cluster_status(self):
 
         return self.get_cluster_status()
 
-
     def create_redshift_client(self):
         """
-        Creates a Redshift client with the credentials declared in the application
-        config files. The application uses this client to create and teardown AWS
-        Redshift clusters.
+        Creates a Redshift client with the credentials declared in the
+        application config files. The application uses this client to
+        create and teardown AWS Redshift clusters.
 
         Returns:
             boto3.client
@@ -74,24 +69,25 @@ class RedshiftOperator:
 
         return client
 
-
     def create_redshift_cluster(self, role_arn):
         """
         Creates a Redshift cluster with the configuration declared in the
-        application config files. Upon creation, the application will wait until
-        the cluster becomes available before proceeding with database operations.
+        application config files. Upon creation, the application will wait
+        until the cluster becomes available before proceeding with database
+        operations.
 
         Args:
-            role_arn (string): A manifest is a list, of dictionary objects containing
-            the details of a task. These keyword arguments are passed to the task's
-            parametrised SQL query which this function executes.
+            role_arn (string): A manifest is a list, of dictionary objects
+            containing the details of a task. These keyword arguments are
+            passed to the task's parametrised SQL query which this function
+            executes.
 
         Returns:
             None
         """
         if self.cluster_status == 'deleting':
             logger.info(
-                f"Please wait, '{self.dwh_cluster_id}' is still being deleted..."
+                f"Please wait, '{self.dwh_cluster_id}' is still deleting..."
             )
             self.wait_for_cluster()
 
@@ -112,18 +108,17 @@ class RedshiftOperator:
         except self.client.exceptions.ClusterAlreadyExistsFault:
             logger.info(
                 f"'{self.dwh_cluster_id}' already exists!"
-        )
+            )
         else:
             self.wait_for_cluster()
             self.get_cluster_endpoint()
 
         logger.info(f"'{self.dwh_cluster_id}' is available")
 
-
     def get_current_region(self):
         """
-        Return the current region of the Redshift client. The result of this method
-        is assigned as a property of this class.
+        Return the current region of the Redshift client. The result of this
+        method is assigned as a property of this class.
 
         Returns:
             string
@@ -132,7 +127,6 @@ class RedshiftOperator:
         current_region = session.region_name
 
         return current_region
-
 
     def get_cluster_endpoint(self):
         """
@@ -146,18 +140,17 @@ class RedshiftOperator:
         """
         try:
             endpoint = self.cluster_info['Clusters'][0]['Endpoint']['Address']
-        except TypeError: 
+        except TypeError:
             return None
         except self.client.exceptions.ClusterNotFoundFault:
             return None
 
         return endpoint
 
-
     def get_cluster_info(self):
         """
-        Return a dictionary of the cluster information. The result of this method
-        is assigned as a property of this class.
+        Return a dictionary of the cluster information. The result of this
+        method is assigned as a property of this class.
 
         Returns:
             json
@@ -173,12 +166,11 @@ class RedshiftOperator:
 
         return info
 
-
     def get_cluster_status(self):
         """
-        Return the status of the cluster. This method is used to check the status
-        of the cluster to determine whether the application should wait for
-        availability.
+        Return the status of the cluster. This method is used to check the
+        status of the cluster to determine whether the application should
+        wait for availability.
 
         Returns:
             string
@@ -192,14 +184,13 @@ class RedshiftOperator:
 
         return status
 
-
     def wait_for_cluster(self):
         """
         Conditionally waits for cluster availability. If the cluster is in the
         process of being created, the application will wait until it becomes
         available before proceeding. Likewise, if the cluster is being deleted,
-        the application will wait until it is deleted before attempting to create
-        it again.
+        the application will wait until it is deleted before attempting to
+        create it again.
 
         Returns:
             None
@@ -222,12 +213,11 @@ class RedshiftOperator:
             }
         )
 
-
     def delete_cluster(self):
         """
-        Deletes the cluster created by the application. This method is invoked from
-        the teardown() method which is executed when the application is in dry_run
-        mode.
+        Deletes the cluster created by the application. This method is invoked
+        from the teardown() method which is executed when the application is
+        in dry_run mode.
 
         Returns:
             json
@@ -244,12 +234,12 @@ class RedshiftOperator:
 
             return response
 
-
     def teardown(self):
         """
-        Invokes delete_cluster() to delete the cluster created by this application.
-        This method is invoked when the application is in `dry_run` mode; the AWS
-        infrastructure is torn down upon completion of the ETL process.
+        Invokes delete_cluster() to delete the cluster created by this
+        application. This method is invoked when the application is in
+        `dry_run` mode; the AWS infrastructure is torn down upon completion
+        of the ETL process.
 
         Returns:
             None

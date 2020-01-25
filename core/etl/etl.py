@@ -15,10 +15,10 @@ logger = log.setup_custom_logger(__name__)
 def run(dry_run=True):
     """
     Orchestrates the application's "Operator" objects to create an AWS
-    infrastructure and Redshift cluster. This function sets up all of the required
-    AWS role permissions and spins up a Redshift cluster. Data is then loaded from
-    S3 to staging tables, before it is cleaned and delivered to the dimensional
-    model.
+    infrastructure and Redshift cluster. This function sets up all of the
+    required AWS role permissions and spins up a Redshift cluster. Data is
+    then loaded from S3 to staging tables, before it is cleaned and delivered
+    to the dimensional model.
 
     Args:
         dry_run (bool): Set to True to teardown the Redshift cluster and AWS

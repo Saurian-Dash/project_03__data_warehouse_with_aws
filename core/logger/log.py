@@ -2,15 +2,17 @@ import logging
 
 
 LEVEL = 'DEBUG'
-FORMAT = '%(asctime)s | Module: %(module)s | Function: %(funcName)s | Message: %(message)s'
+FORMAT = (
+    '%(asctime)s | Module: %(module)s | Function: %(funcName)s | %(message)s'
+)
 DATEFMT = '%Y-%m-%d %H:%M:%S'
 
 
 def setup_custom_logger(name):
     """
-    Sets up a custom logger for use in the application. The logging
-    level is set to DEBUG by default; all debug messages will be logged
-    to the terminal.
+    Sets up a custom logger for use in the application. The logging level
+    is set to DEBUG by default; all debug messages will be logged to the
+    terminal.
 
     Set LEVEL to 'INFO' to disable the debug information.
 
