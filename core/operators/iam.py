@@ -66,8 +66,11 @@ class IAMOperator:
         Returns:
             json
         """
-        roles = self.client.list_roles()
-        role_list = {x['RoleName'] for x in roles['Roles']}
+        dwh_roles = self.client.list_roles()
+        role_list = {x['RoleName'] for x in dwh_roles['Roles']}
+        role_text = (
+            'Allows Redshift clusters to call AWS services on your behalf.'
+        )
 
         if self.dwh_db_role in role_list:
             self.detach_role_policies()
@@ -78,9 +81,7 @@ class IAMOperator:
                 Path='/',
                 RoleName=self.dwh_db_role,
                 AssumeRolePolicyDocument=json.dumps(self.dwh_trust_policy),
-                Description=(
-                    'Allows Redshift clusters to call AWS services.'
-                )
+                Description=role_text,
             )
         except self.client.exceptions.EntityAlreadyExistsException:
             logger.info(

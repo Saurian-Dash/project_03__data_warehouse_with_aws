@@ -226,12 +226,16 @@ def transform_table_dim_artists(
         BEGIN;
 
         CREATE TEMP TABLE t1 AS
-        SELECT DISTINCT
+        SELECT
             artist_id :: VARCHAR,
             artist_name :: VARCHAR AS name,
             artist_location :: VARCHAR AS location,
             artist_latitude :: NUMERIC AS latitude,
-            artist_longitude :: NUMERIC AS longitude
+            artist_longitude :: NUMERIC AS longitude,
+            ROW_NUMBER() OVER (
+                PARTITION BY artist_id
+                ORDER BY year :: INT DESC
+            ) AS rn
         FROM {raw_vault}.{raw_table}
         WHERE artist_id IS NOT NULL;
 
@@ -248,7 +252,8 @@ def transform_table_dim_artists(
             location,
             latitude,
             longitude
-        FROM t1;
+        FROM t1
+        WHERE rn = 1;
 
         DROP TABLE IF EXISTS t1;
 
