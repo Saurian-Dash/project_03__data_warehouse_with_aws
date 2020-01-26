@@ -60,8 +60,8 @@ class IAMOperator:
     def create_role(self):
         """
         Creates an AWS role so that the Redshift client can load data from S3.
-        The trust policy of the role is declared in the configuration files and
-        assigned as a property of this class.
+        The trust policy of the data warehouse role is declared in the config
+        files and assigned as a property of this class.
 
         Returns:
             json
