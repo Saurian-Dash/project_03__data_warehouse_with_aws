@@ -1,8 +1,8 @@
 from psycopg2 import sql
 
 from settings.envs import (
-    DWH_DB_RAW_VAULT,
     DWH_DB_PUBLIC_VAULT,
+    DWH_DB_RAW_VAULT,
 )
 
 
