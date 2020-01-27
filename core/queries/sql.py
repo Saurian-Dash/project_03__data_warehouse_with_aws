@@ -234,7 +234,7 @@ def transform_table_dim_artists(
             artist_longitude :: NUMERIC AS longitude,
             ROW_NUMBER() OVER (
                 PARTITION BY artist_id
-                ORDER BY year :: INT DESC
+                ORDER BY year :: SMALLINT DESC
             ) AS rn
         FROM {raw_vault}.{raw_table}
         WHERE artist_id IS NOT NULL;

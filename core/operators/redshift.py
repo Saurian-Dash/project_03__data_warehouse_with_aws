@@ -42,7 +42,7 @@ class RedshiftOperator:
     @property
     def cluster_region(self):
 
-        return self.get_current_region()
+        return self.get_cluster_region()
 
     @property
     def cluster_status(self):
@@ -115,7 +115,7 @@ class RedshiftOperator:
 
         logger.info(f"'{self.dwh_cluster_id}' is available")
 
-    def get_current_region(self):
+    def get_cluster_region(self):
         """
         Return the current region of the Redshift client. The result of this
         method is assigned as a property of this class.
