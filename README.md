@@ -3,8 +3,6 @@
 
 Sparkify Analytics is an application which creates a dimensional data model in an Amazon Redshift database to serve the analytical needs of Sparkify. The dimension model allows us to slice our songplay event data by many dimensions (categories) to discover new insights and trends.
 
-With up-to-date analysis of user behaviour, we can ride trends as they happen and drive up user engagement.
-
 The dimensional model has been designed with accessibility in mind; business users will spend less time preparing the data and more time gaining insights from it.
 ___
 
