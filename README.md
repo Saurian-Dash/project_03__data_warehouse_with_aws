@@ -9,8 +9,6 @@ The dimensional model has been designed with accessibility in mind; business use
 ___
 
 ## Setup Instructions
-This application interacts with AWS via
-
 
 ### Create an IAM User
 - Sign in to the [IAM console](https://console.aws.amazon.com/iam/) with your AWS credentials.
